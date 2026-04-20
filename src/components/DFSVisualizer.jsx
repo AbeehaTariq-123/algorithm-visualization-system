@@ -1,128 +1,328 @@
+// // import { useState } from "react";
+// // import { dfs } from "../algorithms/dfs";
+
+// // function DFSVisualizer() {
+// //   const graph = {
+// //     0: [1, 2],
+// //     1: [0, 3],
+// //     2: [0, 3],
+// //     3: [1, 2],
+// //   };
+// //   const [visited, setVisited] = useState([]);
+
+// //   function delay() {
+// //     return new Promise(res => setTimeout(res, 500));
+// //   }
+
+// //   async function startDFS() {
+// //     await dfs(graph, 0, setVisited, delay);
+// //   }
+
+// //   return (
+// //     <div className="visualizer">
+// //       <h2>DFS Visualization</h2>
+// //       <div className="array-container">
+// //         {Object.keys(graph).map(node => (
+// //           <div
+// //             key={node}
+// //             className={`bar ${visited.includes(parseInt(node)) ? "active" : ""}`}
+// //             style={{ height: "50px" }}
+// //           >
+// //             {node}
+// //           </div>
+// //         ))}
+// //       </div>
+// //       <div className="controls">
+// //         <button onClick={startDFS}>Start DFS</button>
+// //       </div>
+// //     </div>
+// //   );
+// // }
+
+// // export default DFSVisualizer;
+
 // import { useState } from "react";
 // import { dfs } from "../algorithms/dfs";
 
 // function DFSVisualizer() {
+
 //   const graph = {
-//     0: [1, 2],
-//     1: [0, 3],
-//     2: [0, 3],
-//     3: [1, 2],
+//     A: ["B","C"],
+//     B: ["D","E"],
+//     C: ["F"],
+//     D: [],
+//     E: [],
+//     F: []
 //   };
-//   const [visited, setVisited] = useState([]);
 
-//   function delay() {
-//     return new Promise(res => setTimeout(res, 500));
+//   const [visited,setVisited] = useState([]);
+//   const [message,setMessage] = useState("");
+
+//   function delay(){
+//     return new Promise(res => setTimeout(res,900));
 //   }
 
-//   async function startDFS() {
-//     await dfs(graph, 0, setVisited, delay);
+//   async function startDFS(){
+
+//     setVisited([]);
+
+//     await dfs(
+//       graph,
+//       "A",
+//       setVisited,
+//       setMessage,
+//       delay
+//     );
+
 //   }
 
-//   return (
+//   function nodeClass(node){
+
+//     if(visited.includes(node))
+//       return "node visited";
+
+//     return "node";
+
+//   }
+
+//   return(
+
 //     <div className="visualizer">
-//       <h2>DFS Visualization</h2>
-//       <div className="array-container">
-//         {Object.keys(graph).map(node => (
-//           <div
-//             key={node}
-//             className={`bar ${visited.includes(parseInt(node)) ? "active" : ""}`}
-//             style={{ height: "50px" }}
-//           >
-//             {node}
-//           </div>
-//         ))}
+
+//       <h2>DFS Graph Visualization</h2>
+
+//       <div className="graph-container">
+
+//         {/* Row 1 */}
+//         <div className="graph-row">
+//           <div className={nodeClass("A")}>A</div>
+//         </div>
+
+//         {/* Row 2 */}
+//         <div className="graph-row">
+//           <div className={nodeClass("B")}>B</div>
+//           <div className={nodeClass("C")}>C</div>
+//         </div>
+
+//         {/* Row 3 */}
+//         <div className="graph-row">
+//           <div className={nodeClass("D")}>D</div>
+//           <div className={nodeClass("E")}>E</div>
+//           <div className={nodeClass("F")}>F</div>
+//         </div>
+
 //       </div>
-//       <div className="controls">
-//         <button onClick={startDFS}>Start DFS</button>
-//       </div>
+
+//       <p>{message}</p>
+
+//       <button onClick={startDFS}>
+//         Start DFS
+//       </button>
+
 //     </div>
+
 //   );
+
 // }
 
 // export default DFSVisualizer;
 
-import { useState } from "react";
+
+// 
+
+
+
+import { useState, useRef } from "react";
 import { dfs } from "../algorithms/dfs";
 
 function DFSVisualizer() {
-
-  const graph = {
-    A: ["B","C"],
-    B: ["D","E"],
-    C: ["F"],
+  const [graph, setGraph] = useState({
+    A: ["B", "C"],
+    B: ["D", "E"],
+    C: ["F","G"],
     D: [],
     E: [],
-    F: []
-  };
+    F: [],
+    G: []
+  });
 
-  const [visited,setVisited] = useState([]);
-  const [message,setMessage] = useState("");
+  const [visited, setVisited] = useState([]);
+  const [message, setMessage] = useState("");
+  const [running, setRunning] = useState(false);
+  const [paused, setPaused] = useState(false);
 
-  function delay(){
-    return new Promise(res => setTimeout(res,900));
+  const flags = useRef({ stop: false, pause: false });
+
+  function delay(ms = 800) {
+    return new Promise(res => setTimeout(res, ms));
   }
 
-  async function startDFS(){
-
+  // START
+  async function startDFS() {
     setVisited([]);
+    setMessage("");
 
-    await dfs(
-      graph,
-      "A",
-      setVisited,
-      setMessage,
-      delay
-    );
+    flags.current.stop = false;
+    flags.current.pause = false;
 
+    setRunning(true);
+    setPaused(false);
+
+    const startNode = Object.keys(graph)[0];
+
+    if (!startNode) {
+      setMessage("Graph is empty!");
+      return;
+    }
+
+    await dfs(graph, startNode, setVisited, setMessage, delay, flags.current);
+
+    setRunning(false);
   }
 
-  function nodeClass(node){
-
-    if(visited.includes(node))
-      return "node visited";
-
-    return "node";
-
+  // PAUSE
+  function pauseDFS() {
+    flags.current.pause = true;
+    setPaused(true);
+    setMessage("Paused");
   }
 
-  return(
+  // RESUME
+  function resumeDFS() {
+    flags.current.pause = false;
+    setPaused(false);
+    setMessage("Resumed");
+  }
 
+  // STOP
+  function stopDFS() {
+    flags.current.stop = true;
+    flags.current.pause = false;
+
+    setRunning(false);
+    setPaused(false);
+    setVisited([]);
+    setMessage("Stopped");
+  }
+
+  // USER GRAPH INPUT
+  function handleGraphInput(e) {
+    try {
+      const obj = JSON.parse(e.target.value);
+      setGraph(obj);
+      setVisited([]);
+      setMessage("Custom graph loaded!");
+    } catch {
+      setMessage("Invalid JSON format!");
+    }
+  }
+
+  // SIMPLE TREE LAYOUT
+  const positions = {};
+  const layers = [];
+  const seen = new Set();
+
+  function buildLayers(node, depth = 0) {
+    if (seen.has(node)) return;
+    seen.add(node);
+
+    if (!layers[depth]) layers[depth] = [];
+    layers[depth].push(node);
+
+    (graph[node] || []).forEach(n => buildLayers(n, depth + 1));
+  }
+
+  const root = Object.keys(graph)[0];
+  if (root) buildLayers(root);
+
+  // layers.forEach((layer, y) => {
+  //   layer.forEach((node, i) => {
+  //     positions[node] = {
+  //       x: 120 + i * 120,
+  //       y: 80 + y * 100
+  //     };
+  //   });
+  // });
+  
+     
+
+  const canvasWidth = 800; // total width of graph area
+
+layers.forEach((layer, y) => {
+  const totalWidth = layer.length * 100; // space needed for this layer
+  const startX = (canvasWidth - totalWidth) / 2;
+
+  layer.forEach((node, i) => {
+    positions[node] = {
+      x: startX + i * 100,
+      y: 80 + y * 100
+    };
+  });
+});
+  // EDGES
+  const edges = [];
+  Object.keys(graph).forEach(from => {
+    (graph[from] || []).forEach(to => edges.push([from, to]));
+  });
+
+  return (
     <div className="visualizer">
+      <h2>DFS Graph Visualizer</h2>
 
-      <h2>DFS Graph Visualization</h2>
+      <textarea
+        placeholder='{"A":["B","C"],"B":["D"],"C":[],"D":[]}'
+        onChange={handleGraphInput}
+      />
 
-      <div className="graph-container">
+      <div className="graph-canvas">
+        <svg className="graph-svg">
+          {edges.map(([from, to]) => (
+            // <line
+            //   key={from + "-" + to}
+            //   x1={positions[from]?.x}
+            //   y1={positions[from]?.y}
+            //   x2={positions[to]?.x}
+            //   y2={positions[to]?.y}
+            //   stroke="#333"
+            //   strokeWidth="2"
+            // />
+            <line
+                key={from + "-" + to}
+                x1={positions[from]?.x + 0.5}
+                y1={positions[from]?.y + 0.5}
+                x2={positions[to]?.x + 0.5}
+                y2={positions[to]?.y + 0.5}
+                stroke="#333"
+                strokeWidth="2"
+                strokeLinecap="round"
+            />
+          ))}
+        </svg>
 
-        {/* Row 1 */}
-        <div className="graph-row">
-          <div className={nodeClass("A")}>A</div>
-        </div>
-
-        {/* Row 2 */}
-        <div className="graph-row">
-          <div className={nodeClass("B")}>B</div>
-          <div className={nodeClass("C")}>C</div>
-        </div>
-
-        {/* Row 3 */}
-        <div className="graph-row">
-          <div className={nodeClass("D")}>D</div>
-          <div className={nodeClass("E")}>E</div>
-          <div className={nodeClass("F")}>F</div>
-        </div>
-
+        {Object.keys(graph).map(node => (
+          <div
+            key={node}
+            className={`graph-node ${visited.includes(node) ? "visited" : ""}`}
+            style={{
+              left: (positions[node]?.x || 0) - 25,
+              top: (positions[node]?.y || 0) - 25
+            }}
+          >
+            {node}
+          </div>
+        ))}
       </div>
 
       <p>{message}</p>
 
-      <button onClick={startDFS}>
-        Start DFS
-      </button>
-
+      <div className="controls">
+        <button onClick={startDFS} disabled={running}>Start</button>
+        <button onClick={pauseDFS} disabled={!running || paused}>Pause</button>
+        <button onClick={resumeDFS} disabled={!running || !paused}>Resume</button>
+        <button onClick={stopDFS} disabled={!running}>Stop</button>
+      </div>
     </div>
-
   );
-
 }
 
 export default DFSVisualizer;
