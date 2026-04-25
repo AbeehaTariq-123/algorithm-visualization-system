@@ -1,32 +1,32 @@
 import { BrowserRouter as Router } from "react-router-dom";
 
-import BubbleSortPage from "./pages/BubbleSortPage";
-import BinarySearchPage from "./pages/BinarySearchPage";
-import DFSPage from "./pages/DFSPage";
-import KnapsackPage from "./pages/KnapsackPage";
-import TowerOfHanoiPage from "./pages/TowerPage";
+import BubbleSortPage from "./Pages/BubbleSortPage";
+import BinarySearchPage from "./Pages/BinarySearchPage";
+import DFSPage from "./Pages/DFSPage";
+import KnapsackPage from "./Pages/KnapsackPage";
+import TowerOfHanoiPage from "./Pages/TowerPage";
 import React, { useState } from "react";
 import "./App.css";
-import NQueensPage from "./pages/NQueensPage";
-import BFSPage from "./pages/BFSPage";
-import KruskalPage from "./pages/KruskalPage";
-import HeapSortPage from "./pages/HeapSortPage";
-import InsertionSortPage from "./pages/InsertionSortPage";
-import QuickSortPage from "./pages/QuickSortPage";
-import PrimsPage from "./pages/PrimsPage";
-import LinearSearchPage from "./pages/LinearSearchPage"
-import CoinChangePage from "./pages/CoinChangePage"
-import SudokuPage from "./pages/SudokuPage";
+import NQueensPage from "./Pages/NQueensPage";
+import BFSPage from "./Pages/BFSPage";
+import KruskalPage from "./Pages/KruskalPage";
+import HeapSortPage from "./Pages/HeapSortPage";
+import InsertionSortPage from "./Pages/InsertionSortPage";
+import QuickSortPage from "./Pages/QuickSortPage";
+import PrimsPage from "./Pages/PrimsPage";
+import LinearSearchPage from "./Pages/LinearSearchPage"
+import CoinChangePage from "./Pages/CoinChangePage"
+import SudokuPage from "./Pages/SudokuPage";
 
 
 function App() {
   const [page, setPage] = useState("home");
 
   const algorithms = [
-    "Quick Sort","Linear Search","Prim's Algorithm","Coin Change Problem","Sudoku Solver",
-    "Bubble Sort","Binary Search","Depth-First Search","0/1 Knapsack Problem","Tower of Hanoi",
-    "Merge Sort","Selection Sort","Dijkstra's Algorithm","Bucket Sort","Tree Traversal",
-    "Insertion Sort","Heap Sort","Breadth-First Search","Kruskal's Algorithm","N-Queens Problem"
+    "Quick Sort", "Linear Search", "Prim's Algorithm", "Coin Change Problem", "Sudoku Solver",
+    "Bubble Sort", "Binary Search", "Depth-First Search", "0/1 Knapsack Problem", "Tower of Hanoi",
+    "Merge Sort", "Selection Sort", "Dijkstra's Algorithm", "Bucket Sort", "Tree Traversal",
+    "Insertion Sort", "Heap Sort", "Breadth-First Search", "Kruskal's Algorithm", "N-Queens Problem"
   ];
 
   const algorithmPages = {
@@ -35,16 +35,16 @@ function App() {
     "Depth-First Search": <DFSPage />,
     "0/1 Knapsack Problem": <KnapsackPage />,
     "Tower of Hanoi": <TowerOfHanoiPage />,
-    "N-Queens Problem":<NQueensPage />,
-    "Kruskal's Algorithm":<KruskalPage />,
-    "Insertion Sort":<InsertionSortPage />,
-    "Breadth-First Search": <BFSPage/>,
-    "Heap Sort":<HeapSortPage />,
-    "Quick Sort":<QuickSortPage/>,
-    "Prim's Algorithm":<PrimsPage/>,
-    "Linear Search":<LinearSearchPage/>,
-    "Coin Change Problem":<CoinChangePage/>,
-    "Sudoku Solver":<SudokuPage/>,
+    "N-Queens Problem": <NQueensPage />,
+    "Kruskal's Algorithm": <KruskalPage />,
+    "Insertion Sort": <InsertionSortPage />,
+    "Breadth-First Search": <BFSPage />,
+    "Heap Sort": <HeapSortPage />,
+    "Quick Sort": <QuickSortPage />,
+    "Prim's Algorithm": <PrimsPage />,
+    "Linear Search": <LinearSearchPage />,
+    "Coin Change Problem": <CoinChangePage />,
+    "Sudoku Solver": <SudokuPage />,
 
   };
 
@@ -66,7 +66,7 @@ function App() {
                     className="dropdown-item"
                     onClick={() => {
                       if (algorithmPages[algo]) {
-                        setPage(algo); 
+                        setPage(algo);
                       }
                     }}
                   >
@@ -105,7 +105,7 @@ function App() {
                 <div className="card">Binary Search</div>
                 <div className="card">Dijkstra's Algorithm</div>
                 <div className="card">Breadth First Search</div>
-                
+
               </div>
             </section>
           </div>

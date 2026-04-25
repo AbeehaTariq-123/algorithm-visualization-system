@@ -1,16 +1,16 @@
-import BubbleSortVisualizer from "../components/BubbleSortVisualizer";
+import BubbleSortVisualizer from "../components/bubbleSortVisualizer";
 
-function BubbleSortPage(){
+function BubbleSortPage() {
 
-  return(
+  return (
 
     <div className="algo-page">
 
       <h1>Bubble Sort</h1>
 
       <p>
-      Bubble Sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.
-      It continues until the array becomes sorted.
+        Bubble Sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.
+        It continues until the array becomes sorted.
       </p>
 
       <h3>Time Complexity</h3>
@@ -21,7 +21,7 @@ function BubbleSortPage(){
         <li>Worst Case: O(n²)</li>
       </ul>
 
-      <BubbleSortVisualizer/>
+      <BubbleSortVisualizer />
 
     </div>
 
